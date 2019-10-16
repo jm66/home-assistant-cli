@@ -577,3 +577,18 @@ def get_services(ctx: Configuration,) -> List[Dict[str, Any]]:
     raise HomeAssistantCliError(
         "Error while getting all services: {}".format(req.text)
     )
+
+
+def check_config(ctx: Configuration) -> Dict[str, Any]:
+    try:
+        req = restapi(ctx, METH_POST, hass.URL_API_CONFIG_CHECK, hass.URL_API)
+
+    except HomeAssistantCliError as ex:
+        raise HomeAssistantCliError("Error calling service: {}".format(ex))
+
+    if req.status_code != 200:
+        raise HomeAssistantCliError(
+            "Error calling service: {} - {}".format(req.status_code, req.text)
+        )
+
+    return cast(Dict[str, Any], req.json())

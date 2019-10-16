@@ -77,3 +77,19 @@ def release(ctx: Configuration):
             columns=ctx.columns if ctx.columns else [('VERSION', '$')],
         )
     )
+
+
+@cli.command()
+@pass_context
+def check(ctx: Configuration):
+    """Validate your configuration if you recently made some changes to
+    your configuration and want to make sure that it is all valid"""
+    click.echo(
+        format_output(
+            ctx,
+            [api.check_config(ctx)],
+            columns=ctx.columns
+            if ctx.columns
+            else [('RESULT', 'result'), ('ERRORS', 'errors')],
+        )
+    )
